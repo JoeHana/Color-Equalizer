@@ -1,4 +1,4 @@
-# Color-Equalizer
+# Colorizer
 Simple PHP Script to return desired color shades of a given color
 
 ## How to use
