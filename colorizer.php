@@ -5,207 +5,200 @@
  *
  * @package  Colorizer
  * @author   ANEX
- * @version  2.0.0
+ * @version  1.0.0
  */
- 
-if ( ! defined( 'ABSPATH' ) )
-	exit;
 
-if( ! class_exists( 'Colorizer' ) ) {
+class Colorizer {
 	
-	class Colorizer {
+	/**
+	 * Get Color
+	 * Returns the final color
+	 *
+	 * @param	string	$color		pass a rgb color code
+	 * @param	array	$modifier	pass additional attributes
+	 * @param	string	$format		pass the desired output value (in works)
+	 *
+	 * @since	1.0.0
+	 */
+	public static function get_color( $color = null, $modifier = array(), $format = null ) {
 		
-		/**
-		 * Get Color
-		 * Returns the final color
-		 *
-		 * @param	string	$color		pass a rgb color code
-		 * @param	array	$modifier	pass additional attributes
-		 * @param	string	$format		pass the desired output value (in works)
-		 *
-		 * @since	1.0.0
-		 */
-		public static function get_color( $color = null, $modifier = array(), $format = null ) {
-			
-			if( !array_key_exists( 'type', $modifier ) )
-				$modifier['type'] = null;
-			
-			if( !array_key_exists( 'change', $modifier ) )
-				$modifier['change'] = null;
-			
-			if( !array_key_exists( 'opacity', $modifier ) )
-				$modifier['opacity'] = null;
-			
-			return self::rgb2rgba( self::rgb2str( self::color_shade( self::str2rgb( $color ), $modifier['type'], $modifier['change'] ) ), $modifier['opacity'] );
-					
+		if( !array_key_exists( 'type', $modifier ) )
+			$modifier['type'] = null;
+		
+		if( !array_key_exists( 'change', $modifier ) )
+			$modifier['change'] = null;
+		
+		if( !array_key_exists( 'opacity', $modifier ) )
+			$modifier['opacity'] = null;
+		
+		return self::rgb2rgba( self::rgb2str( self::color_shade( self::str2rgb( $color ), $modifier['type'], $modifier['change'] ) ), $modifier['opacity'] );
+				
+	}
+	
+	/**
+	 *
+	 * HEX to RGBA
+	 * Convert HEX color value to RGBA color value
+	 *
+	 * @param	string	$color
+	 * @param	string	$opacity
+	 *
+	 * @since	1.0.0
+	 *
+	 */
+	public static function hex2rgba( $color, $opacity = false ) {
+	
+		//Return if no color provided
+		if( empty( $color ) )
+			  return; 
+	
+		//Sanitize $color if "#" is provided 
+		if ( $color[0] == '#' ) {
+			$color = substr( $color, 1 );
 		}
-		
-		/**
-		 *
-		 * HEX to RGBA
-		 * Convert HEX color value to RGBA color value
-		 *
-		 * @param	string	$color
-		 * @param	string	$opacity
-		 *
-		 * @since	1.0.0
-		 *
-		 */
-		public static function hex2rgba( $color, $opacity = false ) {
-		
-			//Return if no color provided
-			if( empty( $color ) )
-				  return; 
-		
-			//Sanitize $color if "#" is provided 
-			if ( $color[0] == '#' ) {
-				$color = substr( $color, 1 );
-			}
-		
-			//Check if color has 6 or 3 characters and get values
-			if (strlen($color) == 6) {
-				$hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
-			} elseif ( strlen( $color ) == 3 ) {
-				$hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
-			} else {
-				return 'rgb(0,0,0)';
-			}
-		
-			//Convert hexadec to rgb
-			$rgb = array_map( 'hexdec', $hex );
-		
-			//Check if opacity is set(rgba or rgb)
-			if( $opacity ){
-				if( abs( $opacity ) > 1 )
-					$opacity = 1.0;
-				$output = 'rgba('.implode( ",",$rgb ).','.$opacity.')';
-			} else {
-				$output = 'rgb('.implode( ",",$rgb ).')';
-			}
-		
-			//Return rgb(a) color string
-			return $output;
-			
+	
+		//Check if color has 6 or 3 characters and get values
+		if (strlen($color) == 6) {
+			$hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+		} elseif ( strlen( $color ) == 3 ) {
+			$hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+		} else {
+			return 'rgb(0,0,0)';
 		}
+	
+		//Convert hexadec to rgb
+		$rgb = array_map( 'hexdec', $hex );
+	
+		//Check if opacity is set(rgba or rgb)
+		if( $opacity ){
+			if( abs( $opacity ) > 1 )
+				$opacity = 1.0;
+			$output = 'rgba('.implode( ",",$rgb ).','.$opacity.')';
+		} else {
+			$output = 'rgb('.implode( ",",$rgb ).')';
+		}
+	
+		//Return rgb(a) color string
+		return $output;
 		
-		/**
-		 * RGB to RGBA
-		 * Convert RGB color value to RGBA color value
-		 *
-		 * @param	string	$color
-		 * @param	string	$opacity
-		 *
-		 * @since	1.0.0
-		 */
-		public static function rgb2rgba( $color, $opacity = false ) {
-		
-			// Abort if no color provided
-			if( empty( $color ) )
-				  return; 
-				  
-			// Sanitize $color if "rgba()" is provided 
-			$color = substr( $color, 4, -1 );
-		
-			// Check if opacity is set(rgba or rgb)
-			if( $opacity ) {
+	}
+	
+	/**
+	 * RGB to RGBA
+	 * Convert RGB color value to RGBA color value
+	 *
+	 * @param	string	$color
+	 * @param	string	$opacity
+	 *
+	 * @since	1.0.0
+	 */
+	public static function rgb2rgba( $color, $opacity = false ) {
+	
+		// Abort if no color provided
+		if( empty( $color ) )
+			  return; 
+			  
+		// Sanitize $color if "rgba()" is provided 
+		$color = substr( $color, 4, -1 );
+	
+		// Check if opacity is set(rgba or rgb)
+		if( $opacity ) {
+			
+			if( abs( $opacity ) > 1)
+				$opacity = 1.0;
 				
-				if( abs( $opacity ) > 1)
-					$opacity = 1.0;
-					
-				$output = 'rgba(' . $color . ',' . $opacity . ')';
-				
-			} else {
-				
-				$output = 'rgb(' . $color . ')';
-				
-			}
-		
-			// Return rgb(a) color string
-			return $output;
+			$output = 'rgba(' . $color . ',' . $opacity . ')';
+			
+		} else {
+			
+			$output = 'rgb(' . $color . ')';
 			
 		}
+	
+		// Return rgb(a) color string
+		return $output;
 		
-		/**
-		 * Color Shade
-		 * Calculates color shades of a given color
-		 *
-		 * @param	array	$rgb	- define a rgb color code
-		 * @param	string	$type	- choose lighter or leave empty
-		 * @param	int		$change - defines the change of the base color (eg. 255 -> 250)
-		 *
-		 * @since	1.0.0
-		 */
-		public static function color_shade( array $rgb, $type, $change = 5 ) {
-		
-			 if( $type == 'lighter' ) {
-				 
-				$rgb[0] = 255-( 255-$rgb[0] ) + $change;
-				$rgb[1] = 255-( 255-$rgb[1] ) + $change;
-				$rgb[2] = 255-( 255-$rgb[2] ) + $change;
-		
-			 } else {
-				 
-				 $rgb[0] -= $change;
-				 $rgb[1] -= $change;
-				 $rgb[2] -= $change;
-				 
-			 }
-		
-			 return $rgb;
+	}
+	
+	/**
+	 * Color Shade
+	 * Calculates color shades of a given color
+	 *
+	 * @param	array	$rgb	- define a rgb color code
+	 * @param	string	$type	- choose lighter or leave empty
+	 * @param	int		$change - defines the change of the base color (eg. 255 -> 250)
+	 *
+	 * @since	1.0.0
+	 */
+	public static function color_shade( array $rgb, $type, $change = 5 ) {
+	
+		 if( $type == 'lighter' ) {
 			 
-		}
-		
+			$rgb[0] = 255-( 255-$rgb[0] ) + $change;
+			$rgb[1] = 255-( 255-$rgb[1] ) + $change;
+			$rgb[2] = 255-( 255-$rgb[2] ) + $change;
 	
-		/**
-		 * String to RGB
-		 * Converts a given string to a RGB Color Value
-		 *
-		 * @param	array	$str
-		 *
-		 * @since	1.0.0
-		 */
-		public static function str2rgb( $str ) {
-			
-			if( is_array( $str ) )
-				return $str;
-		
-			$str = preg_replace( '/\s+/', '', $str ); // replace all spaces
-		
-			$str = str_replace( array( 'rgba(', 'rgb(', ')' ), '', $str );
-		
-			$comp = explode( ',', $str, 4 );
-			$cnt  = count( $comp );
-		
-			if( $cnt < 3 || $cnt > 4 )
-				return array( 0,0,0 );
-		
-			return array_map( 'floatval', $comp );
-			
-		}
+		 } else {
+			 
+			 $rgb[0] -= $change;
+			 $rgb[1] -= $change;
+			 $rgb[2] -= $change;
+			 
+		 }
 	
-		/**
-		 * RGB to String
-		 * Converts a given RGB Color Value to a String
-		 *
-		 * @param	array	$rgb
-		 * @param	bool	$raw
-		 *
-		 * @since	1.0.0
-		 */
-		public static function rgb2str( $rgb, $raw = false ) {
-			
-			$str = implode( ',', $rgb );
+		 return $rgb;
+		 
+	}
+	
+
+	/**
+	 * String to RGB
+	 * Converts a given string to a RGB Color Value
+	 *
+	 * @param	array	$str
+	 *
+	 * @since	1.0.0
+	 */
+	public static function str2rgb( $str ) {
 		
-			if( $raw )
-				return $str;
-		
-			return ( ( count( $rgb ) == 3 ) ? 'rgb(' : 'rgba(' ) . $str . ')';
-			
-		}
-		
+		if( is_array( $str ) )
+			return $str;
+	
+		$str = preg_replace( '/\s+/', '', $str ); // replace all spaces
+	
+		$str = str_replace( array( 'rgba(', 'rgb(', ')' ), '', $str );
+	
+		$comp = explode( ',', $str, 4 );
+		$cnt  = count( $comp );
+	
+		if( $cnt < 3 || $cnt > 4 )
+			return array( 0,0,0 );
+	
+		return array_map( 'floatval', $comp );
 		
 	}
 
+	/**
+	 * RGB to String
+	 * Converts a given RGB Color Value to a String
+	 *
+	 * @param	array	$rgb
+	 * @param	bool	$raw
+	 *
+	 * @since	1.0.0
+	 */
+	public static function rgb2str( $rgb, $raw = false ) {
+		
+		$str = implode( ',', $rgb );
+	
+		if( $raw )
+			return $str;
+	
+		return ( ( count( $rgb ) == 3 ) ? 'rgb(' : 'rgba(' ) . $str . ')';
+		
+	}
+	
+	
 }
 
 /**
