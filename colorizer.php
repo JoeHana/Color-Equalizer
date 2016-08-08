@@ -16,11 +16,10 @@ class Colorizer {
 	 *
 	 * @param	string	$color		pass a rgb color code
 	 * @param	array	$modifier	pass additional attributes
-	 * @param	string	$format		pass the desired output value (in works)
 	 *
 	 * @since	1.0.0
 	 */
-	public static function get_color( $color = null, $modifier = array(), $format = null ) {
+	public static function get_color( $color = null, $modifier = array() ) {
 		
 		if( !array_key_exists( 'type', $modifier ) )
 			$modifier['type'] = null;
@@ -34,55 +33,7 @@ class Colorizer {
 		return self::rgb2rgba( self::rgb2str( self::color_shade( self::str2rgb( $color ), $modifier['type'], $modifier['change'] ) ), $modifier['opacity'] );
 				
 	}
-	
-	/**
-	 *
-	 * HEX to RGBA
-	 * Convert HEX color value to RGBA color value
-	 *
-	 * @param	string	$color
-	 * @param	string	$opacity
-	 *
-	 * @since	1.0.0
-	 *
-	 */
-	public static function hex2rgba( $color, $opacity = false ) {
-	
-		//Return if no color provided
-		if( empty( $color ) )
-			  return; 
-	
-		//Sanitize $color if "#" is provided 
-		if ( $color[0] == '#' ) {
-			$color = substr( $color, 1 );
-		}
-	
-		//Check if color has 6 or 3 characters and get values
-		if (strlen($color) == 6) {
-			$hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
-		} elseif ( strlen( $color ) == 3 ) {
-			$hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
-		} else {
-			return 'rgb(0,0,0)';
-		}
-	
-		//Convert hexadec to rgb
-		$rgb = array_map( 'hexdec', $hex );
-	
-		//Check if opacity is set(rgba or rgb)
-		if( $opacity ){
-			if( abs( $opacity ) > 1 )
-				$opacity = 1.0;
-			$output = 'rgba('.implode( ",",$rgb ).','.$opacity.')';
-		} else {
-			$output = 'rgb('.implode( ",",$rgb ).')';
-		}
-	
-		//Return rgb(a) color string
-		return $output;
 		
-	}
-	
 	/**
 	 * RGB to RGBA
 	 * Convert RGB color value to RGBA color value
@@ -207,12 +158,11 @@ class Colorizer {
  *
  * @param	string	$color
  * @param	array	$modifier
- * @param	string	$format
  *
  * @since	1.0.0
  */
-function colorizer( $color = null, $modifier = array(), $format = null ) {
+function colorizer( $color = null, $modifier = array() ) {
 	
-	return Colorizer::get_color( $color, $modifier, $format );
+	return Colorizer::get_color( $color, $modifier );
 	
 }
