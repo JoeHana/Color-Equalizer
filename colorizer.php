@@ -161,6 +161,7 @@ class Colorizer {
  *
  * @since	1.0.0
  */
+
 function colorizer( $color = null, $modifier = array() ) {
 	
 	return Colorizer::get_color( $color, $modifier );

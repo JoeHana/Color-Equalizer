@@ -32,7 +32,6 @@ colorizer( $color, $modifier )
 The following example takes a slight grey rgb color code and applies an opacity of .5 to it.
 
 ```php
-
 $color = 'rgb( 200, 200, 200 )';
 $modifier = array(
 	'opacity' => '.5'
@@ -41,12 +40,17 @@ $modifier = array(
 colorizer( $color, $modifier );
 ```
 
+or
+
+```php
+colorizer( 'rgb( 200, 200, 200 )', array( 'opacity' => '.5' ) );
+```
+
 ### Example 2:
 
 The following example takes a slight grey rgb color code, makes it darker and applies an opacity of .5 to it.
 
 ```php
-
 $color = 'rgb( 200, 200, 200 )';
 $modifier = array(
 	'type'		=> 'darker',
@@ -55,4 +59,10 @@ $modifier = array(
 );
 
 colorizer( $color, $modifier );
+```
+
+or
+
+```php
+colorizer( 'rgb( 200, 200, 200 )', array( 'type' => 'darker', 'change' => 50, opacity' => '.5' ) );
 ```
